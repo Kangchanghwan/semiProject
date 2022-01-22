@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/common::head('정보수정')">
+</head>
+<body>
+<link th:href="@{/css/sign.css}" rel="stylesheet">
+<div th:replace="fragment/common::header('edit')"></div>
+<div class="container">
+<br>
+    <br>
+    <div class="card">
+        <h3 class="card-header">정보수정</h3>
+        <div class="card-body">
+            <form th:action="@{/account/edit}" method="post" th:object="${form}">
+                <div class="form-floating mb-3">
+                    <input type="email" th:field="*{email}" class="form-control" disabled id="floatingInput"
+                           placeholder="name@example.com">
+                    <label for="floatingInput">Email address</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" th:field="*{password}" id="password" class="form-control"
+                           placeholder="Password">
+                    <label for="password">새로운 비밀번호</label>
+                </div>
+                <div class="form-floating">
+                    <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Password">
+                    <label for="name">이름</label>
+                </div>
+                <div class="form-floating">
+                    <input type="text" th:field="*{phone}" class="form-control" id="phone" placeholder="Password">
+                    <label for="phone">휴대폰번호 (-)없이 입력해주세요.</label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="submit" id="submit" >확인</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">비밀번호 입력</h5>
+                <button type="button" class="btn-close" id="close" onclick="location.href='/'"></button>
+
+            </div>
+            <form method="post" id="pwck">
+            <div class="modal-body">
+                <div class="mb-3 row">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                    <div class="col-sm-10">
+                        <input  type="password" name="password" class="form-control" id="inputPassword" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="pwck()">확인</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragment/common::footer"></div>
+
+<script>
+    $(window).on('load',function(){
+            $('#staticBackdrop').modal('show');
+            $('#submit').attr('type','hidden');
+            $('#submit').hide();
+    });
+
+    function pwck(){
+
+        let formData = $('#pwck').serialize();
+        $.ajax({
+            cache : false,
+            url : "/account/pwck", // 요기에
+            type : 'POST',
+            headers: { "X-CSRF-TOKEN": "[[${_csrf.token}]]" },
+            data : formData,
+            success : function(data) {
+                if(data){
+                    console.log('확인되었습니다.');
+                    $('#staticBackdrop').modal('hide');
+                    $('#submit').attr('type','submit');
+                    $('#submit').show();
+                }else{
+                    console.log('다시 확인해주세요.');
+                }
+            }, // success
+
+            error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                console.log("통신 실패." + XMLHttpRequest + errorThrown + textStatus)
+            }
+        }); // $.ajax */
+    }
+
+
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+
+</script>
+</body>
+</html>

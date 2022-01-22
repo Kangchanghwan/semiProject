@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/common::head('글쓰기')">
+</head>
+<body>
+<link th:href="@{/css/sign.css}" rel="stylesheet">
+<div th:replace="fragment/common::header('newp')"></div>
+<div class="container">
+<br>
+    <br>
+    <div class="card">
+        <h3 class="card-header">수정</h3>
+        <div class="card-body">
+            <form th:action="@{/post/edit}" method="post" th:object="${form}">
+                <input type="hidden" th:field="*{id}">
+                <div class="form-floating mb-3">
+                    <input type="text" th:field="*{title}" class="form-control" id="floatingInput"
+                           placeholder="title">
+                    <label for="floatingInput">제목</label>
+                </div>
+                <div class="form-floating">
+                    <div class="form-floating">
+                        <textarea class="form-control" th:field="*{content}" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 400px"></textarea>
+                        <label for="floatingTextarea2">내용</label>
+                    </div>
+                </div>
+
+                <button class="w-100 btn btn-lg btn-primary" type="submit">글 수정</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="fragment/common::footer"></div>
+</body>
+</html>

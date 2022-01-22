@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="fragment/common::head('글쓰기')">
+</head>
+<body>
+<link th:href="@{/css/sign.css}" rel="stylesheet">
+<div th:replace="fragment/common::header('newp')"></div>
+<div class="container">
+<br>
+    <br>
+    <div class="card">
+        <h3 class="card-header" th:text="${form.title}"></h3>
+        <div class="card-body" >
+            <p class="card-text" th:text="${form.content}"></p>
+        </div>
+    </div>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end" th:if="${#authentication.getName() == form.email}" >
+        <a class="btn btn-primary me-md-2" type="button" th:href="@{/post/edit(id=${form.id})}" >수정</a>
+        <button class="btn btn-primary" type="button" th:onclick="|deletePost(${form.id})|" sec:authorize="!hasRole('USER')" th:text="${form.removeYn?'복구':'삭제'}">삭제</button>
+    </div>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end" sec:authorize="hasRole('USER')" >
+        <button class="btn btn-primary" type="button" th:onclick="|deletePost(${form.id})|" th:text="${form.removeYn?'복구':'삭제'}">삭제</button>
+    </div>
+</div>
+<div th:replace="fragment/common::footer"></div>
+<script>
+    function deletePost(id) {
+        $.ajax({
+            url:'/post/delete'+id,
+            type: "GET",
+            success: function (result) {
+                console.log("result",result);
+                alert("처리되었습니다.");
+                window.location.href='/';
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                alert("통신 실패.")
+            }
+        });
+    }
+</script>
+</body>
+</html>
