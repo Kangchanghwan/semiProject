@@ -10,30 +10,43 @@
     <br>
     <div class="card">
         <h3 class="card-header">회원가입</h3>
+
         <div class="card-body">
             <form th:action="@{/account/register}" method="post" th:object="${form}">
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-3" th:with=" isValid=${#fields.hasErrors()}">
                     <input type="email" th:field="*{email}" class="form-control" id="floatingInput"
-                           placeholder="name@example.com">
+                           placeholder="name@example.com" th:classappend="${isValid} ? 'is-invalid'">
                     <label for="floatingInput">Email address</label>
+                    <div id="validationServer03Feedback" class="invalid-feedback" th:if="${isValid}" th:text="${#fields.errors('email')}">
+                        에러내용
+                    </div>
                 </div>
-                <div class="form-floating">
+                <div class="form-floating" th:with=" isValid=${#fields.hasErrors('password')}">
                     <input type="password" th:field="*{password}" id="password" class="form-control"
-                           placeholder="Password">
+                           placeholder="Password"  th:classappend="${isValid} ? 'is-invalid'">
                     <label for="password">비밀번호</label>
+                    <div id="validationServer04Feedback" class="invalid-feedback" th:if="${isValid}" th:text="${#fields.errors('password')}">
+                        에러내용
+                    </div>
                 </div>
 <!--                <div class="form-floating">-->
 <!--                    <input type="password" th:field="*{password}" id="password" class="form-control"-->
 <!--                           placeholder="Password">-->
 <!--                    <label for="password">비밀번호확인</label>-->
 <!--                </div>-->
-                <div class="form-floating">
-                    <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Password">
+                <div class="form-floating" th:with="isValid=${#fields.hasErrors('name')}">
+                    <input type="text" th:field="*{name}" th:classappend="${isValid} ? 'is-invalid'" class="form-control" id="name" placeholder="Password">
                     <label for="name">이름</label>
+                    <div id="validationServer05Feedback" class="invalid-feedback" th:if="${isValid}" th:text="${#fields.errors('name')}">>
+                        에러내용
+                    </div>
                 </div>
-                <div class="form-floating">
-                    <input type="text" th:field="*{phone}" class="form-control" id="phone" placeholder="Password">
+                <div class="form-floating" th:with="isValid=${#fields.hasErrors('phone')}">
+                    <input type="text" th:field="*{phone}" class="form-control" id="phone" th:classappend="${isValid} ? 'is-invalid'" placeholder="Password">
                     <label for="phone">휴대폰번호 (-)없이 입력해주세요.</label>
+                    <div id="validationServer06Feedback" class="invalid-feedback" th:if="${isValid}" th:text="${#fields.errors('phone')}">>
+                        에러내용
+                    </div>
                 </div>
                 <button class="w-100 btn btn-lg btn-primary" type="submit">가입하기</button>
             </form>

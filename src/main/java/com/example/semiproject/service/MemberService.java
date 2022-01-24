@@ -5,6 +5,7 @@ import com.example.semiproject.dao.form.MemberEditForm;
 import com.example.semiproject.dao.form.MemberLoginForm;
 import com.example.semiproject.entity.Member;
 import com.example.semiproject.entity.Role;
+import com.example.semiproject.repository.MemberCustomRepository;
 import com.example.semiproject.repository.MemberRepository;
 import com.example.semiproject.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
+    private final MemberCustomRepository memberCustomRepository;
 
 
     public Member save(Member member) {
@@ -66,7 +68,7 @@ public class MemberService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Optional<Member> opMember = memberRepository.findByEmail(email);
+        Optional<Member> opMember = memberCustomRepository.findByEmail(email);
 
         if (opMember.isPresent()) {
             Member member = opMember.get();

@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -29,13 +31,20 @@ public class MemberController {
     }
 
     @GetMapping("register")
-    public String join(Model model) {
-        model.addAttribute("form", new MemberJoinForm());
+    public String join(Model model, @ModelAttribute MemberJoinForm joinForm) {
+        model.addAttribute("form", joinForm);
         return "/account/register";
     }
 
     @PostMapping("register")
-    public String save(MemberJoinForm joinForm) {
+    public String save(@Validated @ModelAttribute(name = "form") MemberJoinForm joinForm,
+                       BindingResult result,
+                       Model model) {
+       if(result.hasErrors()){
+           model.addAttribute("form",joinForm);
+           return "/account/register";
+       }
+
         Member member = new Member();
         joinForm.setPassword(passwordEncoder.encode(joinForm.getPassword()));
         member.mappingJoinMember(joinForm);

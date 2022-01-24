@@ -32,7 +32,7 @@ public class Member{
     private LocalDateTime remove_date;
     private Boolean enabled = Boolean.TRUE;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "member_role",
                 joinColumns = @JoinColumn(name="member_id"),
                 inverseJoinColumns = @JoinColumn(name = "role_id"))
