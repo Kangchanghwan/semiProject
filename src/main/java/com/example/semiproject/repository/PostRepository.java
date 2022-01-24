@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post,Long> {
 
-    Page<Post> findByTitleContainingOrContentContainingOrderByCreateDateDesc(String title, String content, Pageable pageable);
+    Page<Post> findByRemoveYnAndTitleContainingOrderByCreatedDateDesc(Boolean removeYn,String title, Pageable pageable);
 
 }

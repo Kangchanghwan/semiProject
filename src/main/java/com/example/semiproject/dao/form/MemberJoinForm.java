@@ -21,6 +21,6 @@ public class MemberJoinForm {
     @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "숫자와 영어만 입력하세요.")
     private String password;
     @NotBlank
-    @Pattern(regexp = "^[0-9]]")
+    @Pattern(regexp = "^[0-9]+$")
     private String phone;
 }

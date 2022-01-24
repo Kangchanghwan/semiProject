@@ -4,6 +4,7 @@ import com.example.semiproject.dao.MemberCustomDetails;
 import com.example.semiproject.dao.form.PostForm;
 import com.example.semiproject.entity.Member;
 import com.example.semiproject.entity.Post;
+import com.example.semiproject.entity.Role;
 import com.example.semiproject.repository.MemberRepository;
 import com.example.semiproject.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -91,15 +93,24 @@ public class PostController {
         form.setId(post.getId());
         form.setTitle(post.getTitle());
         form.setContent(post.getContent());
-        form.setRemoveYn(post.getRemove_Yn());
+        form.setRemoveYn(post.getRemoveYn());
         form.setEmail(post.getMember().getEmail());
         model.addAttribute("form",form);
         return "post/form";
     }
 
     @GetMapping("/delete{id}")
-    public String deletePost(@PathVariable("id") Long id){
-        postService.delete(id);
+    public String deletePost(@PathVariable("id") Long id,@AuthenticationPrincipal MemberCustomDetails user){
+        boolean role_admin = user.getAuthorities().stream().anyMatch(e -> e.getAuthority().equals("ROLE_ADMIN"));
+        System.out.println("role_admin = " + role_admin);
+        for (GrantedAuthority authority : user.getAuthorities()) {
+            System.out.println("authority.getAuthority() = " + authority.getAuthority());
+        }
+        if(role_admin){
+            postService.deleteFromAdmin(id);
+        }else{
+            postService.delete(id,user.getEmail());
+        }
         return "redirect:/post";
     }
 
@@ -116,8 +127,8 @@ public class PostController {
     }
 
     @PostMapping("/edit")
-    public String editPostPage(PostForm form){
-        postService.update(form);
+    public String editPostPage(PostForm form,@AuthenticationPrincipal MemberCustomDetails user){
+        postService.update(form,user.getEmail());
         return "redirect:/post/form?id="+form.getId();
     }
 

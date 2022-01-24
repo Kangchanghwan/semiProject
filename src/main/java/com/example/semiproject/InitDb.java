@@ -42,12 +42,10 @@ public class InitDb {
         private PasswordEncoder passwordEncoder;
         public void doInit(){
             Role role = new Role();
-
             role.setName("ROLE_ADMIN");
-
             roleRepository.save(role);
             Role role1 = new Role();
-            role.setName("ROLE_USER");
+            role1.setName("ROLE_USER");
             roleRepository.save(role1);
 
             Member member = new Member();
@@ -55,11 +53,11 @@ public class InitDb {
             member.setEmail("admin@admin");
             member.setPassword(passwordEncoder.encode("admin"));
             member.addRole(role);
+            member.addRole(role1);
             memberRepository.save(member);
 
             for(int i = 0 ; i < 30; i++){
-                Post post = new Post(null,"테스트"+i,"테스트입니다." + i,LocalDateTime.now(),false,member);
-                LocalDateTime createDate = post.getCreateDate();
+                Post post = new Post(null,"테스트"+i,"테스트입니다." + i,false,member);
                 postRepository.save(post);
             }
 

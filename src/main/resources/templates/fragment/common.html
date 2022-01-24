@@ -85,7 +85,7 @@
                     </form>
                 </li>
 
-                <li class="nav-item" th:if="${#authorization.expr('isAuthenticated()')}"  sec:authorize="hasRole('ROLE_USER')">
+                <li class="nav-item" th:if="${#authorization.expr('isAuthenticated()')}"  sec:authorize="hasRole('ROLE_ADMIN')">
                     <a class="nav-link" href="#" th:href="@{/post/admin}"
                        th:classappend="${menu} == 'admin'?'active'">관리자 페이지</a>
                 </li>

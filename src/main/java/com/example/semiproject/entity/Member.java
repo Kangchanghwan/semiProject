@@ -16,7 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-public class Member{
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Member extends BaseTimeEntity{
 
     @Id
     @GeneratedValue
@@ -28,7 +29,6 @@ public class Member{
     private String email;
     private String password;
     private String phone;
-    private LocalDateTime created_date;
     private LocalDateTime remove_date;
     private Boolean enabled = Boolean.TRUE;
 
@@ -46,7 +46,6 @@ public class Member{
         this.email = form.getEmail();
         this.password = form.getPassword();
         this.phone = form.getPhone();
-        this.created_date = LocalDateTime.now();
     }
 
     public void addRole(Role role){

@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-public class Post {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Post extends BaseTimeEntity{
 
     @Id
     @GeneratedValue
@@ -25,8 +26,7 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private LocalDateTime createDate;
-    private Boolean remove_Yn = Boolean.FALSE;
+    private Boolean removeYn = Boolean.FALSE;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -36,7 +36,6 @@ public class Post {
     public void postMapping(PostForm form){
         this.title = form.getTitle();
         this.content = form.getContent();
-        this.createDate = LocalDateTime.now();
     }
 
 }

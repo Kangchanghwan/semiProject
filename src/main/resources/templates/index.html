@@ -33,12 +33,12 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="post:${list}" th:unless="${post.remove_Yn}">
+        <tr th:each="post:${list}">
 
             <td th:text="${post.id}"></td>
             <td><a th:text="${post.title}" href="#" th:href="@{/post/form(id=${post.id})}" >title</a></td>
             <td th:text="${post.member.name}"></td>
-            <td th:text="${#temporals.format(post.createDate,'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${#temporals.format(post.getCreatedDate(),'yyyy-MM-dd HH:mm')}"></td>
         </tr>
         </tbody>
     </table>
