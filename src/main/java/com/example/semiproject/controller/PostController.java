@@ -43,12 +43,12 @@ public class PostController {
         switch (request.getRequestURI()){
 
             case "/post/mypost" :{
-                posts = postService.myPostSelectALL(name,pageable);
+                posts = postService.myPostSelectALL(name,searchText,pageable);
                 extracted(model, posts);
                 return "/post/myPost";
             }
             case "/post/admin" :{
-                posts = postService.selectAll(searchText,pageable);
+                posts = postService.adminselectAll(searchText,pageable);
                 extracted(model, posts);
                 return "/admin/adminPost";
             }
@@ -76,7 +76,7 @@ public class PostController {
     }
 
     @PostMapping("/newp")
-    public String createPost(PostForm form, @AuthenticationPrincipal MemberCustomDetails user) {
+    public String createPost(@ModelAttribute PostForm form, @AuthenticationPrincipal MemberCustomDetails user) {
         Post post = new Post();
         String name = user.getEmail();
         Optional<Member> member = memberRepository.findByEmail(name);
@@ -102,10 +102,6 @@ public class PostController {
     @GetMapping("/delete{id}")
     public String deletePost(@PathVariable("id") Long id,@AuthenticationPrincipal MemberCustomDetails user){
         boolean role_admin = user.getAuthorities().stream().anyMatch(e -> e.getAuthority().equals("ROLE_ADMIN"));
-        System.out.println("role_admin = " + role_admin);
-        for (GrantedAuthority authority : user.getAuthorities()) {
-            System.out.println("authority.getAuthority() = " + authority.getAuthority());
-        }
         if(role_admin){
             postService.deleteFromAdmin(id);
         }else{
@@ -131,5 +127,6 @@ public class PostController {
         postService.update(form,user.getEmail());
         return "redirect:/post/form?id="+form.getId();
     }
+
 
 }

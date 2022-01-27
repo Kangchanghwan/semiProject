@@ -22,11 +22,10 @@ public class PostService {
 
 
     public Page<Post> selectAll(String searchText, Pageable pageable){
-
         return postRepository.findByRemoveYnAndTitleContainingOrderByCreatedDateDesc(false,searchText, pageable);
     }
-    public Page<Post> myPostSelectALL(String email, Pageable pageable){
-        return postCustomRepository.findByEmail(email , pageable);
+    public Page<Post> myPostSelectALL(String email,String searchText, Pageable pageable){
+        return postCustomRepository.findByEmail(email ,searchText, pageable);
     }
     public Post selectOne(Long id){
         return postRepository.findById(id).get();
@@ -59,5 +58,9 @@ public class PostService {
     public void deleteFromAdmin(Long id) {
         Post post = postRepository.findById(id).get();
         post.setRemoveYn(!post.getRemoveYn());
+    }
+
+    public Page<Post> adminselectAll(String searchText, Pageable pageable) {
+        return postRepository.findByTitleContainingOrderByCreatedDateDesc(searchText, pageable);
     }
 }

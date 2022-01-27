@@ -1,0 +1,80 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/common::head('회원목록')">
+</head>
+<body>
+
+<header th:replace="fragment/common::header('users')">
+</header>
+<br>
+<br>
+<main class="container">
+    <h2>ADMIN</h2>
+    <div class="d-flex justify-content-end">
+        <!--        <div>건수 : <span th:text="${list.getTotalElements()}"></span></div>-->
+        <form class="row g-3" method="get" th:action="@{/account/users}">
+            <div class="col-auto">
+                <label for="searchText" class="visually-hidden">검색</label>
+                <input type="text" class="form-control" id="searchText" name="email"
+                       th:value="${param.email}">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-light mb-2">검색</button>
+            </div>
+            <div class="form-group mx-sm-1 mb-2">
+                <select th:value="${param.role}"  name="role" class="form-control">
+                    <option value="">권한</option>
+                    <option>ROLE_USER
+                    </option>
+                    <option>ROLE_ADMIN
+                    </option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <table class="table table-striped table-hove">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">email</th>
+            <th scope="col">작성한 게시글 수</th>
+            <th scope="col">가입일</th>
+            <th scope="col">수정일</th>
+            <th scope="col">권한</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member:${list}" class="" th:classappend="${!member.enabled} ? 'table-danger'">
+            <td th:text="${member.id}"></td>
+            <td><a th:text="${member.email}" href="#" th:href="@{/account/postlist(id=${member.id})}">title</a></td>
+            <td th:text="${member.postList.size()}"></td>
+            <td th:text="${#temporals.format(member.getCreatedDate(),'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${#temporals.format(member.getModifiedDate(),'yyyy-MM-dd HH:mm')}"></td>
+            <td>
+                <th:block th:each="role : ${member.getRoles()}">
+                    <div th:text="${role.name}">role</div>
+                </th:block>
+                <br></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!--    <nav aria-label="Page navigation example">-->
+    <!--        <ul class="pagination justify-content-center">-->
+    <!--            <li class="page-item" th:classappend="${ 1 == list.pageable.pageNumber + 1} ? 'disabled'">-->
+    <!--                <a class="page-link" th:href="@{/post/admin(page=${list.pageable.pageNumber -1},searchText=${param.searchText})}">Previous</a>-->
+    <!--            </li>-->
+    <!--            <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}"-->
+    <!--                th:classappend="${ i == list.pageable.pageNumber + 1} ? 'disabled'">-->
+    <!--                <a class="page-link" th:text="${i}" href="#" th:href="@{/post/admin(page=${i - 1},searchText=${param.searchText})}">1</a></li>-->
+    <!--            <li class="page-item" th:classappend="${ list.totalPages == list.pageable.pageNumber + 1 or list.totalPages == 0 }   ? 'disabled'">-->
+    <!--                <a class="page-link" href="#" th:href="@{/post/admin(page=${list.pageable.pageNumber +1},searchText=${param.searchText})}">Next</a>-->
+    <!--            </li>-->
+    <!--        </ul>-->
+    <!--    </nav>-->
+</main>
+<div th:replace="fragment/common::footer">
+</div>
+
+</body>
+</html>

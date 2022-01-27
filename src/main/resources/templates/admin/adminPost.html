@@ -10,9 +10,9 @@
 <br>
 <main class="container">
     <h2>ADMIN</h2>
-    <div>현재 페이지 건수 : <span th:text="${list.getNumberOfElements()}"></span></div>
+    <div>건수 : <span th:text="${list.getTotalElements()}"></span></div>
     <div class="d-flex justify-content-end">
-        <form class="row g-3" method="get" th:action="@{/post}">
+        <form class="row g-3" method="get" th:action="@{/post/admin}">
             <div class="col-auto">
                 <label for="searchText" class="visually-hidden">검색</label>
                 <input type="text" class="form-control" id="searchText" name="searchText" th:value="${param.searchText}">

@@ -56,7 +56,7 @@ public class MemberService implements UserDetailsService {
         return findMember;
     }
 
-    public List<Member> members() {
+    public List<Member> members(String searchText) {
         return memberRepository.findAll();
     }
 

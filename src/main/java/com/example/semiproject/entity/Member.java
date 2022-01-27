@@ -52,4 +52,5 @@ public class Member extends BaseTimeEntity{
         this.roles.add(role);
     }
 
+
 }

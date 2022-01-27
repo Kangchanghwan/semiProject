@@ -14,18 +14,23 @@
         <div class="card-body">
             <form th:action="@{/account/register}" method="post" th:object="${form}">
                 <div class="form-floating mb-3" th:with=" isValid=${#fields.hasErrors()}">
-                    <input type="email" th:field="*{email}" class="form-control" id="floatingInput"
-                           placeholder="name@example.com" th:classappend="${isValid} ? 'is-invalid'">
+                    <input type="email" th:field="*{email}" th:id="email" th:name='email' class="form-control" id="floatingInput"
+                           placeholder="name@example.com"  th:classappend="${isValid} ? 'is-invalid'">
                     <label for="floatingInput">Email address</label>
                     <div id="validationServer03Feedback" class="invalid-feedback" th:if="${isValid}" th:text="${#fields.errors('email')}">
                         에러내용
                     </div>
                 </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary" type="button"  th:id="check" onclick="emailCheck()">중복확인</button>
+                </div>
+                <br>
+
                 <div class="form-floating" th:with=" isValid=${#fields.hasErrors('password')}">
-                    <input type="password" th:field="*{password}" id="password" class="form-control"
-                           placeholder="Password"  th:classappend="${isValid} ? 'is-invalid'">
+                    <input type="password" th:field="*{password}" th:id="password" id="password" class="form-control"
+                           placeholder="Password"  th:classappend="${isValid} ? 'is-invalid'" disabled >
                     <label for="password">비밀번호</label>
-                    <div id="validationServer04Feedback" class="invalid-feedback" th:if="${isValid}" th:text="${#fields.errors('password')}">
+                    <div id="validationServer04Feedback" class="invalid-feedback" th:if="${isValid}" th:text="${#fields.errors('password')}" >
                         에러내용
                     </div>
                 </div>
@@ -35,24 +40,59 @@
 <!--                    <label for="password">비밀번호확인</label>-->
 <!--                </div>-->
                 <div class="form-floating" th:with="isValid=${#fields.hasErrors('name')}">
-                    <input type="text" th:field="*{name}" th:classappend="${isValid} ? 'is-invalid'" class="form-control" id="name" placeholder="Password">
+                    <input type="text" th:field="*{name}" th:id="name"  th:classappend="${isValid} ? 'is-invalid'" class="form-control" id="name" placeholder="Password"disabled >
                     <label for="name">이름</label>
                     <div id="validationServer05Feedback" class="invalid-feedback" th:if="${isValid}" th:text="${#fields.errors('name')}">>
                         에러내용
                     </div>
                 </div>
                 <div class="form-floating" th:with="isValid=${#fields.hasErrors('phone')}">
-                    <input type="text" th:field="*{phone}" class="form-control" id="phone" th:classappend="${isValid} ? 'is-invalid'" placeholder="Password">
+                    <input type="text" th:field="*{phone}" th:id="phone"  class="form-control" id="phone" th:classappend="${isValid} ? 'is-invalid'" placeholder="Password" disabled>
                     <label for="phone">휴대폰번호 (-)없이 입력해주세요.</label>
-                    <div id="validationServer06Feedback" class="invalid-feedback" th:if="${isValid}" th:text="${#fields.errors('phone')}">>
+                    <div id="validationServer06Feedback" class="invalid-feedback" th:if="${isValid}" th:text="${#fields.errors('phone')}">
                         에러내용
                     </div>
                 </div>
-                <button class="w-100 btn btn-lg btn-primary" type="submit">가입하기</button>
+                <button class="w-100 btn btn-lg btn-primary" th:id="submit"  type="submit" disabled >가입하기</button>
             </form>
         </div>
     </div>
 </div>
+<script>
+
+
+    function emailCheck(){
+
+        let formData = $('#email').val();
+        console.log(formData);
+        $.ajax({
+            cache : false,
+            url : "/account/redundancy", // 요기에
+            type : 'POST',
+            headers: { "X-CSRF-TOKEN": "[[${_csrf.token}]]" },
+            data : {'email' : formData},
+            async :false,
+            success : function(data) {
+                if(data){
+                    console.log('사용가능합니다.');
+                    $('#email').attr('readonly','true');
+                    $('#check').attr('disabled','true')
+                    $('#password').removeAttr('disabled');
+                    $('#name').removeAttr('disabled');
+                    $('#phone').removeAttr('disabled');
+                    $('#submit').removeAttr('disabled');
+                }else{
+
+                    console.log('다시 확인해주세요.');
+                }
+            }, // success
+
+            error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                console.log("통신 실패." + XMLHttpRequest + errorThrown + textStatus)
+            }
+        }); // $.ajax */
+    }
+</script>
 <div th:replace="fragment/common::footer"></div>
 </body>
 </html>

@@ -14,5 +14,6 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post,Long> {
 
     Page<Post> findByRemoveYnAndTitleContainingOrderByCreatedDateDesc(Boolean removeYn,String title, Pageable pageable);
+    Page<Post> findByTitleContainingOrderByCreatedDateDesc(String title, Pageable pageable);
 
 }

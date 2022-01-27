@@ -85,13 +85,19 @@
                     </form>
                 </li>
 
-                <li class="nav-item" th:if="${#authorization.expr('isAuthenticated()')}"  sec:authorize="hasRole('ROLE_ADMIN')">
-                    <a class="nav-link" href="#" th:href="@{/post/admin}"
-                       th:classappend="${menu} == 'admin'?'active'">관리자 페이지</a>
-                </li>
                 <li class="nav-item" th:if="${#authorization.expr('isAuthenticated()')}" >
                     <a class="nav-link" href="#" th:href="@{/post/mypost}"
                        th:classappend="${menu} == 'mypost'?'active'">내가 쓴 글</a>
+                </li>
+
+
+                <li class="nav-item" th:if="${#authorization.expr('isAuthenticated()')}"  sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link" href="#" th:href="@{/post/admin}"
+                       th:classappend="${menu} == 'admin'?'active'">게시물 관리</a>
+                </li>
+                <li class="nav-item" th:if="${#authorization.expr('isAuthenticated()')}"  sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link" href="#" th:href="@{/account/users}"
+                       th:classappend="${menu} == 'users'?'active'">회원 관리</a>
                 </li>
             </ul>
         </div>

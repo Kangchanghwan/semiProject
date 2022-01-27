@@ -18,9 +18,9 @@ public class PostCustomRepository {
 
     private final EntityManager entityManager;
 
-    public Page<Post> findByEmail(String email, Pageable pageable){
-        List list = entityManager.createQuery("select p from Post p join fetch p.member m where  m.email = :email")
-                .setParameter("email", email).getResultList();
+    public Page<Post> findByEmail(String email,String searchText, Pageable pageable){
+        List list = entityManager.createQuery("select p from Post p join fetch p.member m where m.email = :email and p.title like :searchText")
+                .setParameter("email", email).setParameter("searchText","%"+searchText+"%").getResultList();
         int start = (int)pageable.getOffset();
         final int end = Math.min((start + pageable.getPageSize()), list.size());
         final Page<Post> page = new PageImpl<Post>(list.subList(start, end), pageable, list.size());
